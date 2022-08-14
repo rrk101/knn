@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const char *output_file_name = "vector_data.txt";
+const char *output_file_name = "new_vector_data.txt";
 
 const int N = 10000000;
 
