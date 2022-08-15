@@ -14,7 +14,9 @@ Generates "queries.txt", default parameters are : N = 100 and dim = 100,
 uniform real distribution(-100,100)
 
 3. g++ -std=c++11 brute_force_output_generation.cpp
-Generates "brute_force_output.txt",contains indexes of nearest neigbours.
+Generates "brute_force_output.txt",contains 10 nearest neigbours for each query.
+
+
 
 
 
