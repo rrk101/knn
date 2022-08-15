@@ -11,6 +11,29 @@ const float range_to    = 100.0f;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 uniform_real_distribution<float>  distr(range_from, range_to);
 
+typedef struct dim100 d100;
+
+struct dim100{
+        float coord[100];
+
+};
+
+void copy(d100 &a,vector<float> &v)
+{
+    for(int i=0;i<100;i++)
+    {
+        a.coord[i] = v[i];
+    }
+}
+void copy(d100 &a,d100 &b)
+{
+    for(int i=0;i<100;i++)
+    {
+        a.coord[i] = b.coord[i];
+    }
+}
+
+
 
 class cmp
 {
@@ -161,7 +184,24 @@ void load_queries(vector<vector<float>> &queries)
     }
         cout<<"All queries loaded!\n";
 }
-
+bool is_equal(vector<vector<d100>> &a,vector<vector<d100>> &b,float &difference)
+{
+    for(int i=0;i<100;i++)
+    {
+        for(int j=0;j<10;j++)
+        {
+            for(int k=0;k<100;k++)
+            {
+                if(a[i][j].coord[k]!=b[i][j].coord[k])
+                {
+                    difference+=abs(a[i][j].coord[k]-b[i][j].coord[k]);
+                }
+            }
+        }
+    }
+    if(difference>0.0f) return false;
+    return true;
+}
 int main()
 {
 
@@ -188,10 +228,22 @@ int main()
     load_all_points(points);
     load_queries(queries);
     //cout<<queries.size()<<" "<<queries.back().size()<<"\n";
-    vector<vector<int>> results1(100,vector<int>(10)),results2;
+    vector<vector<int>> results2;
     //results1 = calculate_by_sort(points,queries);
     //cout<<"here\n";
     results2 = calculate_by_heap(points,queries);
+    vector<vector<d100>> query_output(100),results1(100,vector<d100>(10));
+    int l=0;
+    for(auto &i:results2)
+    {
+        for(auto &j:i)
+        {
+            d100 temp;
+            copy(temp,points[j]);
+            query_output[l].push_back(temp);
+        }
+        ++l;
+    }
     // if(results1==results2)
     // {
     //     cout<<"The results are same!\n";
@@ -205,17 +257,26 @@ int main()
             freopen(output_results,"r",stdin);
                 for(auto &i:results1)
                 {
-                    for(auto &j:i) cin>>j;
-                    // cout<<"\n";
+                    for(auto &j:i)
+                    {
+                        d100 temp;
+                        for(int k=0;k<100;k++) cin>>temp.coord[k];
+                        copy(j,temp);
+                    }
                 }
+                    // cout<<"\n";
+
         }
-        if(results1==results2)
+        float difference=0.0f;
+        if(is_equal(query_output,results1,difference))
+        //if(query_output==results1)
         {
             cout<<"The results are same!\n";
         }
         else
         {
             cout<<"The results are different!\n";
+            cout<<"difference : "<<difference;
         }
 
 

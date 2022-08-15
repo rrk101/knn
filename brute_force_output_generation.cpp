@@ -12,6 +12,21 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 uniform_real_distribution<float>  distr(range_from, range_to);
 
 
+typedef struct dim100 d100;
+
+struct dim100{
+        float coord[100];
+
+};
+
+void copy(d100 &a,vector<float> &v)
+{
+    for(int i=0;i<100;i++)
+    {
+        a.coord[i] = v[i];
+    }
+}
+
 class cmp
 {
 public:
@@ -192,6 +207,18 @@ int main()
     //results1 = calculate_by_sort(points,queries);
     //cout<<"here\n";
     results2 = calculate_by_heap(points,queries);
+    vector<vector<d100>> query_output(100);
+    int l=0;
+    for(auto &i:results2)
+    {
+        for(auto &j:i)
+        {
+            d100 temp;
+            copy(temp,points[j]);
+            query_output[l].push_back(temp);
+        }
+        ++l;
+    }
     // if(results1==results2)
     // {
     //     cout<<"The results are same!\n";
@@ -203,9 +230,13 @@ int main()
     //cout<<"HERE"<<results.size()<<" "<<results.back().size()<<"\n";
         {
             freopen(output_results,"w",stdout);
-                for(auto &i:results2)
+                for(auto &i:query_output)
                 {
-                    for(auto &j:i) cout<<j<<" ";
+                    for(auto &j:i)
+                    {
+                        for(int k=0;k<100;k++) cout<<j.coord[k]<<" ";
+                        cout<<"\n";
+                    }
                     cout<<"\n";
                 }
         }
