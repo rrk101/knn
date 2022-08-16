@@ -6,10 +6,10 @@ const char* input_data = "new_vector_data.dat";
 const char* output_results = "brute_force_output.txt";
 const char* input_queries_file = "queries.txt";
 const float N = 10000000,M = 100;
-const float range_from  = -100.0f;
-const float range_to    = 100.0f;
+const int range_from  = -100.0f;
+const int range_to    = 100.0f;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-//uniform_real_distribution<float>  distr(range_from, range_to);
+//uniform_real_distribution<int>  distr(range_from, range_to);
 
 typedef struct dim100 d100;
 
@@ -53,12 +53,12 @@ public:
     }
 }*/
 
-inline float calc_euclidean_distance(vector<float> &p1,vector<float> &p2)
+inline int calc_euclidean_distance(vector<float> &p1,vector<float> &p2)
 {
     //cout<<p1.size()<<" "<<p2.size()<<"\n";
     assert(p1.size()==p2.size());
     int n = p1.size();
-    float ans=0.0f,tmp;
+    int ans=0.0f,tmp;
     for(int i=0;i<n;i++)
     {
         tmp = (p1[i] - p2[i]);
@@ -79,10 +79,10 @@ vector<vector<int>> calculate_by_sort(vector<vector<float>> &v,vector<vector<flo
     for(auto &i:q)
     {
         auto start = high_resolution_clock::now();
-        vector<pair<int,float>> tempv;
+        vector<pair<int,int>> tempv;
         for(int j=0;j<N;j++)
         {
-            float distance = calc_euclidean_distance(v[j],i);
+            int distance = calc_euclidean_distance(v[j],i);
             tempv.push_back({j,distance});
         }
         sort(tempv.begin(),tempv.end(),cmp1);
@@ -111,10 +111,10 @@ vector<vector<int>> calculate_by_heap(vector<vector<float>> &v,vector<vector<flo
     for(auto &i:q)
     {
         auto start = high_resolution_clock::now();
-        priority_queue<pair<int,float>,vector<pair<int,float>>,cmp> pq;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,cmp> pq;
         for(int j=0;j<N;j++)
         {
-            float distance = calc_euclidean_distance(v[j],i);
+            int distance = calc_euclidean_distance(v[j],i);
             if(pq.size()<10)
                     pq.push({j,distance});
             else
@@ -128,7 +128,7 @@ vector<vector<int>> calculate_by_heap(vector<vector<float>> &v,vector<vector<flo
                 }
             }
         }
-        vector<pair<int,float>> tempv;
+        vector<pair<int,int>> tempv;
         while(!pq.empty()) {tempv.push_back(pq.top());pq.pop();}
         sort(tempv.begin(),tempv.end(),cmp1);
         // for(auto &kl:tempv) cout<<kl.first<<" "<<kl.second<<"\n";

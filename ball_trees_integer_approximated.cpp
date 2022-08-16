@@ -59,9 +59,9 @@ struct node
 
 typedef struct node node;
 node *root = NULL;
-float calc_euclidean_distance(d100 &p1,d100 &p2)
+int calc_euclidean_distance(d100 &p1,d100 &p2)
 {
-    float ans=0.0f,tmp;
+    int ans=0.0f,tmp;
     for(int i=0;i<100;i++)
     {
         tmp = (p1.coord[i] - p2.coord[i]);
@@ -87,7 +87,7 @@ node* construct_leaf(int l,int r)
     float temp_r = 0.0f;
     for(int i=l;i<=r;i++)
     {
-        float distance = calc_euclidean_distance(v[median],v[i]);
+        int distance = calc_euclidean_distance(v[median],v[i]);
         temp_r = max(1.0f*distance,temp_r);
     }
     leaf->radius = temp_r;
@@ -111,7 +111,7 @@ node* construct_ball_tree(int l,int r)
     float temp_r = 0.0f;
     for(int i=l;i<=r;i++)
     {
-        float distance = calc_euclidean_distance(v[median],v[i]);
+        int distance = calc_euclidean_distance(v[median],v[i]);
         temp_r = max(1.0f*distance,temp_r);
     }
     internal_node->radius = temp_r;
@@ -123,8 +123,8 @@ node* construct_ball_tree(int l,int r)
 void knn_search(d100 &q,node *ball)
 {
     auto tope = init_heap.get_top_point();
-    float d1=calc_euclidean_distance(q,ball->pivot);
-    float d2=calc_euclidean_distance(q,v[tope]);
+    int d1=calc_euclidean_distance(q,ball->pivot);
+    int d2=calc_euclidean_distance(q,v[tope]);
     if(d1-ball->radius>=d2)return;
     else if(ball->is_leaf)
     {
@@ -143,7 +143,7 @@ void knn_search(d100 &q,node *ball)
     }
     else
     {
-        float a1,a2;
+        int a1,a2;
         auto lft= ball->left,rght = ball->right;
         a1 = calc_euclidean_distance(lft->pivot,q);
         a2 = calc_euclidean_distance(rght->pivot,q);
@@ -202,7 +202,7 @@ void initialize_heap_for_a_query(d100& q)
     while(!init_heap.pq.empty()) init_heap.pq.pop();
     for(int i=0;i<10;i++)
     {
-        float distance = calc_euclidean_distance(q,v[i]);
+        int distance = calc_euclidean_distance(q,v[i]);
         init_heap.pq.push({distance,i});
     }
     assert(init_heap.pq.size()==10);
