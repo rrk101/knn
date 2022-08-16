@@ -147,16 +147,21 @@ void knn_search(d100 &q,node *ball)
         auto lft= ball->left,rght = ball->right;
         a1 = calc_euclidean_distance(lft->pivot,q);
         a2 = calc_euclidean_distance(rght->pivot,q);
-        if(a1<a2)
+        if(a1<a2-rght->radius)
         {
             knn_search(q,lft);
+
+        }
+        else if(a2<a1-lft->radius)
+        {
             knn_search(q,rght);
         }
         else
         {
-            knn_search(q,rght);
             knn_search(q,lft);
+            knn_search(q,rght);
         }
+        
     }
 
 }
