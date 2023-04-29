@@ -31,6 +31,10 @@ With Integer approximation:
 Without Integer approximation:
 > g++ -std=c++11 -O3 ball_tree.cpp -o ball_tree.exe
 
+| program | tf-xla | tf-standard | tf-mlir |
+| ---     | ------ | ------------ | -------|
+| 1,1    | 1,2 | 1,3 | 1,4 |
+
 
 
 
